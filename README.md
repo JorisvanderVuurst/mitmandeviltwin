@@ -5,3 +5,15 @@ just a basic menu for these 2 to be used easier
 ```
 git clone https://github.com/JorisvanderVuurst/mitmandeviltwin.git
 ```
+
+```
+cd mitmandeviltwin
+```
+
+```
+chmod +x cerluxmitm.sh
+```
+
+```
+sudo cerluxmitm.sh
+```
