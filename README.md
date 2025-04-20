@@ -15,5 +15,5 @@ chmod +x cerluxmitm.sh
 ```
 
 ```
-sudo cerluxmitm.sh
+sudo ./cerluxmitm.sh
 ```
