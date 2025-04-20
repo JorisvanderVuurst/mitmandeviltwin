@@ -93,15 +93,15 @@ scan_networks() {
 # Target specific network
 target_network() {
     echo -e "${BLUE}Enter target network details:${NC}"
-    read -p "$(echo -e ${GREEN}SSID: ${NC})" TARGET_SSID
-    read -p "$(echo -e ${GREEN}BSSID (MAC): ${NC})" TARGET_BSSID
-    read -p "$(echo -e ${GREEN}Channel: ${NC})" TARGET_CHANNEL
+    read -p "$(echo -e "${GREEN}SSID: ${NC}")" TARGET_SSID
+    read -p "$(echo -e "${GREEN}BSSID (MAC): ${NC}")" TARGET_BSSID
+    read -p "$(echo -e "${GREEN}Channel: ${NC}")" TARGET_CHANNEL
     
     echo -e "${BLUE}Starting capture on target network...${NC}"
     echo -e "${YELLOW}Press Ctrl+C when you've captured enough data${NC}"
     sleep 2
     xterm -geometry 100x30 -e "airodump-ng -c $TARGET_CHANNEL --bssid $TARGET_BSSID -w $CAPTURE_FILE $INTERFACE" &
-    read -p "$(echo -e ${GREEN}Press Enter to stop capturing...${NC})" 
+    read -p "$(echo -e "${GREEN}Press Enter to stop capturing...${NC}")" 
     killall xterm
 }
 
@@ -201,11 +201,11 @@ main_menu() {
     echo -e "${BLUE}5. Launch Man-in-the-Middle Attack${NC}"
     echo -e "${BLUE}6. Exit${NC}"
     echo
-    read -p "$(echo -e ${GREEN}Select an option: ${NC})" option
+    read -p "$(echo -e "${GREEN}Select an option: ${NC}")" option
     
     case $option in
         1)
-            read -p "$(echo -e ${GREEN}Enter wireless interface: ${NC})" INTERFACE
+            read -p "$(echo -e "${GREEN}Enter wireless interface: ${NC}")" INTERFACE
             start_monitoring
             main_menu
             ;;
