@@ -67,6 +67,18 @@ cleanup() {
 # Set up trap for cleanup
 trap cleanup SIGINT SIGTERM EXIT
 
+# List available wireless interfaces
+list_interfaces() {
+    echo -e "${BLUE}Available wireless interfaces:${NC}"
+    echo -e "${YELLOW}------------------------------${NC}"
+    iwconfig 2>/dev/null | grep -o "^[a-zA-Z0-9]*" | grep -v "lo" | while read -r interface; do
+        if [[ -n "$interface" ]]; then
+            echo -e "${GREEN}$interface${NC}"
+        fi
+    done
+    echo -e "${YELLOW}------------------------------${NC}"
+}
+
 # Start monitoring mode
 start_monitoring() {
     echo -e "${BLUE}Starting monitoring mode on $INTERFACE...${NC}"
@@ -205,6 +217,7 @@ main_menu() {
     
     case $option in
         1)
+            list_interfaces
             read -p "$(echo -e "${GREEN}Enter wireless interface: ${NC}")" INTERFACE
             start_monitoring
             main_menu
