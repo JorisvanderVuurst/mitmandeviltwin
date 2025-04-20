@@ -71,12 +71,26 @@ trap cleanup SIGINT SIGTERM EXIT
 list_interfaces() {
     echo -e "${BLUE}Available wireless interfaces:${NC}"
     echo -e "${YELLOW}------------------------------${NC}"
-    iwconfig 2>/dev/null | grep -o "^[a-zA-Z0-9]*" | grep -v "lo" | while read -r interface; do
+    
+    # Create an array to store interfaces
+    interfaces=()
+    
+    # Get all wireless interfaces
+    while read -r interface; do
         if [[ -n "$interface" ]]; then
-            echo -e "${GREEN}$interface${NC}"
+            interfaces+=("$interface")
         fi
+    done < <(iwconfig 2>/dev/null | grep -o "^[a-zA-Z0-9]*" | grep -v "lo")
+    
+    # Display interfaces with numbers
+    for i in "${!interfaces[@]}"; do
+        echo -e "${GREEN}$((i+1)). ${interfaces[$i]}${NC}"
     done
+    
     echo -e "${YELLOW}------------------------------${NC}"
+    
+    # Return the array of interfaces
+    AVAILABLE_INTERFACES=("${interfaces[@]}")
 }
 
 # Start monitoring mode
@@ -218,8 +232,19 @@ main_menu() {
     case $option in
         1)
             list_interfaces
-            read -p "$(echo -e "${GREEN}Enter wireless interface: ${NC}")" INTERFACE
-            start_monitoring
+            echo -e "${GREEN}Select interface by number:${NC}"
+            read interface_number
+            
+            # Validate input
+            if ! [[ "$interface_number" =~ ^[0-9]+$ ]] || [ "$interface_number" -lt 1 ] || [ "$interface_number" -gt ${#AVAILABLE_INTERFACES[@]} ]; then
+                echo -e "${RED}Invalid selection. Please try again.${NC}"
+                sleep 2
+                main_menu
+            else
+                INTERFACE=${AVAILABLE_INTERFACES[$((interface_number-1))]}
+                echo -e "${GREEN}Selected interface: $INTERFACE${NC}"
+                start_monitoring
+            fi
             main_menu
             ;;
         2)
